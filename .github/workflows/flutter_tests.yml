@@ -20,6 +20,8 @@ jobs:
         with:
           flutter-version: "3.0.4"
           channel: "stable"
+
+      - name: Show Flutter version
         run: flutter --version
 
       - name: Get Flutter packages
