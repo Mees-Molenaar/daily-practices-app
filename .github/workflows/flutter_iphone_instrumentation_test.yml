@@ -9,6 +9,16 @@ jobs:
   iphone_instrumentation_test:
     runs-on: macOS-latest
 
+    matrix:
+      device:
+        - "iPhone 13 Simulator (15.2)"
+
     steps:
       - name: List all simulators
         run: xcrun xctrace list devices
+
+      - name: Get UDID device
+        run: UDID=$(xcrun xctrace list devices | awk -F " " '/${{ matrix.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
+
+      - name: Print UDID
+        run: echo $UDID
