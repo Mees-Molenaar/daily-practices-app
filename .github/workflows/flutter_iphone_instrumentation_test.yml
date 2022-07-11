@@ -9,9 +9,8 @@ jobs:
   iphone_instrumentation_test:
     runs-on: macOS-latest
 
-    matrix:
-      device:
-        - "iPhone 13 Simulator (15.2)"
+    env:
+      device: iPhone 13 Simulator (15.2)
 
     steps:
       - name: List all simulators
