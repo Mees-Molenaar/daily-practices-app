@@ -38,7 +38,7 @@ jobs:
           UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
-          flutter emulators --launch UDID
+]          flutter test integration_test --device-id $UDID
 
       - name: Flutter devices
         run: flutter devices
