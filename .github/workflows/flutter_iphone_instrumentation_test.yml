@@ -16,7 +16,7 @@ jobs:
       - name: List all simulators
         run: xcrun xctrace list devices
 
-      - name: Get UDID device
+      - name: Get UDID device and Start Simulator
         run: |
           UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
           echo $UDID
