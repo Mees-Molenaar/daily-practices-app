@@ -16,12 +16,6 @@ jobs:
       - name: List all simulators
         run: xcrun xctrace list devices
 
-      - name: Get UDID device and Start Simulator
-        run: |
-          UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
-          echo $UDID
-          xcrun simctl boot "${UDID:?No Simulator with this name found}"
-
       # First checkout the new code
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -38,6 +32,13 @@ jobs:
 
       - name: Get Flutter packages
         run: flutter pub get
+
+      - name: Get UDID device, Start Simulator and Connect flutter
+        run: |
+          UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
+          echo $UDID
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+          flutter emulators --launch UDID
 
       - name: Flutter devices
         run: flutter devices
