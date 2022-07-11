@@ -21,3 +21,23 @@ jobs:
           UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
+
+      # First checkout the new code
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      # Use a handy action from the Github marketplace to install flutter
+      - name: Install and set Flutter version
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.0.4"
+          channel: "stable"
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Get Flutter packages
+        run: flutter pub get
+
+      - name: Flutter devices
+        run: flutter devices
