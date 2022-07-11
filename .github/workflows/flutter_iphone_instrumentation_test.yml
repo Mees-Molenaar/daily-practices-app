@@ -20,7 +20,6 @@ jobs:
         run: xcrun xctrace list devices | awk -F " " '/iPhone 13 Simulator \(15.2\)/ {print $5}'
 
       - name: Get UDID device
-        run: UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
-
-      - name: Print UDID
-        run: echo $UDID
+        run: |
+        UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
+        echo $UDID
