@@ -21,5 +21,5 @@ jobs:
 
       - name: Get UDID device
         run: |
-        UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
-        echo $UDID
+          UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
+          echo $UDID
