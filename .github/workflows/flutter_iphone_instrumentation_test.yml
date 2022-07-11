@@ -39,6 +39,3 @@ jobs:
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
           flutter test integration_test -d $UDID --verbose
-
-      - name: Flutter devices
-        run: flutter devices
