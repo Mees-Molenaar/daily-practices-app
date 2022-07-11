@@ -38,4 +38,4 @@ jobs:
           UDID=$(xcrun xctrace list devices | awk -F " " '/${{ env.device }}/ && length($5) > 1 {print $5}' | tr -d '()')
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
-          flutter test integration_test -d $UDID --verbose
+          flutter test integration_test -d $UDID
