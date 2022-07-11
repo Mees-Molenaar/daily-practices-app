@@ -1,0 +1,14 @@
+name: flutter iphone instrumentation test
+
+# Perform action when code is pushed to the main branche
+on:
+  push:
+    branches: [main]
+
+jobs:
+  iphone_instrumentation_test:
+    runs-on: macOS-latest
+
+    steps:
+      - name: List all simulators
+        run: xcrun xctrace list devices
