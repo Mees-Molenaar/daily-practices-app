@@ -10,7 +10,7 @@ jobs:
     runs-on: macOS-latest
 
     env:
-      device: "iPhone 13 Simulator (15.2)"
+      device: 'iPhone 13 Simulator \(15.2\)'
 
     steps:
       - name: List all simulators
