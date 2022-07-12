@@ -1,6 +1,4 @@
-library daily_practices_api;
-
-import 'package:daily_practices_api/models/daily_practice.dart';
+import 'package:daily_practices_api/src/models/daily_practice.dart';
 
 abstract class IDailyPracticesApi {
   const IDailyPracticesApi();

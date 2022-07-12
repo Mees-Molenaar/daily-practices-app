@@ -1,4 +1,4 @@
-import 'package:daily_practices_api/models/daily_practice.dart';
+import 'package:daily_practices_api/src/models/daily_practice.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

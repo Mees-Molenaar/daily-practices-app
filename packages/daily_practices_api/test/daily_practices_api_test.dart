@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:daily_practices_api/i_daily_practices_api.dart';
+import 'package:daily_practices_api/src/i_daily_practices_api.dart';
 
 class TestDailyPracticesApi extends IDailyPracticesApi {
   TestDailyPracticesApi() : super();

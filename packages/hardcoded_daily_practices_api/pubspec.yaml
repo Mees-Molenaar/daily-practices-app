@@ -1,7 +1,7 @@
-name: daily_practices_api
+name: hardcoded_daily_practices_api
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -11,15 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  equatable: ^2.0.3
   json_annotation: ^4.6.0
+  rxdart: ^0.27.4
+  daily_practices_api:
+    path: ../daily_practices_api
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  build_runner: ^2.0.0
-  json_serializable: ^6.3.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
