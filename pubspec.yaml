@@ -33,6 +33,17 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
+
+  hardcoded_daily_practices_api:
+    path: "packages/hardcoded_daily_practices_api"
+
+  daily_practices_api:
+    path: "packages/daily_practices_api"
+
+  daily_practices_repository:
+    path: "packages/daily_practices_repository"
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +51,8 @@ dev_dependencies:
 
   integration_test:
     sdk: flutter
+
+  mocktail: ^0.3.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
