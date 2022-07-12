@@ -1,27 +1,17 @@
 import 'package:daily_practices_api/daily_practices_api.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hardcoded_daily_practices_api/data/practices_data.dart';
 
 import 'package:hardcoded_daily_practices_api/src/hardcoded_daily_practices_api.dart';
 
 void main() {
   group('HardcodedDailyPracticesApi', () {
-    const practices = [
-      DailyPractice(
-        id: 1,
-        practice: 'practice 1',
-      ),
-      DailyPractice(
-        id: 2,
-        practice: 'practice 2',
-      ),
-      DailyPractice(
-        id: 3,
-        practice: 'practice 3',
-      ),
+    final practices = [
+      for (var practice in dailyPractices) DailyPractice.fromJson(practice)
     ];
 
-    HardcodedDailyPracticesApi createSubject({practices = practices}) {
-      return HardcodedDailyPracticesApi(practices);
+    HardcodedDailyPracticesApi createSubject() {
+      return HardcodedDailyPracticesApi();
     }
 
     group('constructor', () {
@@ -40,12 +30,6 @@ void main() {
             api.getDailyPractices(),
             emits(practices),
           );
-        });
-
-        test('with empty list if no practices present', () {
-          final api = createSubject(practices: const <DailyPractice>[]);
-
-          expect(api.getDailyPractices(), emits(const <DailyPractice>[]));
         });
       });
     });
