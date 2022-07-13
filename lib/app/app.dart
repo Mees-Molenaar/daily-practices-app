@@ -1,4 +1,4 @@
-import 'package:daily_practices_app/features/home/home.dart';
+import 'package:daily_practices_app/features/home/view/home.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
