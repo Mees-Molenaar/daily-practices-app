@@ -1,8 +1,6 @@
 import 'package:daily_practices_app/features/home/home.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyPracticeApp extends StatelessWidget {

@@ -4,14 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDailyPracticesRepository extends Mock
-    implements DailyPracticesRepository {}
+import '../../../mocks/mocks.dart';
 
 void main() {
   late DailyPracticesRepository api;
 
+  const practices = [
+    DailyPractice(
+      id: 1,
+      practice: 'test practice',
+    ),
+    DailyPractice(
+      id: 2,
+      practice: 'test practice 2',
+    ),
+    DailyPractice(
+      id: 3,
+      practice: 'test practice 3',
+    ),
+  ];
+
   setUp(() {
     api = MockDailyPracticesRepository();
+    when(() => api.getDailyPractices()).thenAnswer((_) => const Stream.empty());
   });
 
   group('Widget test', () {
@@ -22,13 +37,18 @@ void main() {
 
       // Test dat er een listview is
       final listView = find.byType(ListView);
-      expect(listView, findsOneWidget);
+      expect(
+        listView,
+        findsOneWidget,
+        reason: 'List View should be made',
+      );
 
       // Test dat je listitems op je scherm hebt
       final listItem = find.byType(ListTile);
       expect(
         listItem,
         findsWidgets,
+        reason: 'Multiple list tile should be made',
       );
 
       // Test je kunt scrollen naar de laatste entry: "Deep Breathing"
