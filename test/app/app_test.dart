@@ -1,4 +1,5 @@
 import 'package:daily_practices_app/features/home/view/home.dart';
+import 'package:daily_practices_app/theme/theme.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,11 +38,9 @@ void main() {
 
       expect(find.byType(MaterialApp), findsOneWidget);
 
-      throw UnimplementedError('Need to implement themes');
-
-      // final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      // expect(materialApp.theme, equals(FlutterPracticesTheme.light));
-      // expect(materialApp.darkTheme, equals(FlutterPracticesTheme.dark));
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.theme, equals(FlutterPracticesTheme.light));
+      expect(materialApp.darkTheme, equals(FlutterPracticesTheme.dark));
     });
 
     testWidgets('renders PracticesPage', (tester) async {

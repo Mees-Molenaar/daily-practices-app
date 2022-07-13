@@ -1,4 +1,5 @@
 import 'package:daily_practices_app/features/home/view/home.dart';
+import 'package:daily_practices_app/theme/theme.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +25,9 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: PracticesPage(),
+    return MaterialApp(
+      theme: FlutterPracticesTheme.light,
+      home: const PracticesPage(),
     );
   }
 }
