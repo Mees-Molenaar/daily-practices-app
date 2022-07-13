@@ -27,6 +27,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: FlutterPracticesTheme.light,
+      darkTheme: FlutterPracticesTheme.dark,
       home: const PracticesPage(),
     );
   }
