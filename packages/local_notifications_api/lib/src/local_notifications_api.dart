@@ -1,5 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:notifications_api/notifications_api.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationsApi implements INotificationsApi {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -24,12 +28,19 @@ class LocalNotificationsApi implements INotificationsApi {
   }
 
   @override
-  void showNotification(String message) {
-    flutterLocalNotificationsPlugin.show(
+  void setNotification(
+    tz.TZDateTime notificationTime,
+    String message,
+  ) {
+    flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'Daily Practices App',
       message,
-      null,
+      notificationTime,
+      const NotificationDetails(),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }

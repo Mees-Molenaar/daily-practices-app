@@ -1,7 +1,10 @@
+import 'package:timezone/timezone.dart' as tz;
+
 abstract class INotificationsApi {
   const INotificationsApi();
 
-  void showNotification(
+  void setNotification(
+    tz.TZDateTime notificationTime,
     String message,
   );
 }
