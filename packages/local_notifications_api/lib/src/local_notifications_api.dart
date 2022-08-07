@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:developer';
+
 import 'package:notifications_api/notifications_api.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -13,10 +15,12 @@ class LocalNotificationsApi implements INotificationsApi {
     try {
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('app_icon');
+
       const InitializationSettings initializationSettings =
           InitializationSettings(
         android: initializationSettingsAndroid,
       );
+
       await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
       );
@@ -30,13 +34,33 @@ class LocalNotificationsApi implements INotificationsApi {
   void setNotification(
     tz.TZDateTime notificationTime,
     String message,
-  ) {
-    flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
+  ) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('test_channel', 'test_channel',
+            channelDescription: 'your channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+
+    log('Hello');
+    await flutterLocalNotificationsPlugin.show(
+      12345,
+      'Daily Practices App',
+      'Notification is set! for ${notificationTime.toString()}',
+      const NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+      ),
+    );
+
+    log('Is it me your looking foooor');
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      12456,
       'Daily Practices App',
       message,
       notificationTime,
-      const NotificationDetails(),
+      const NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+      ),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
