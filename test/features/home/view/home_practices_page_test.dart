@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:bloc_test/bloc_test.dart';
 
 import '../../../mocks/mocks.dart';
 
@@ -62,8 +63,9 @@ void main() {
     setUp(() {
       homeBloc = MockHomeBlock();
       when(() => homeBloc.state).thenReturn(
-        const HomeState(
+        HomeState(
           practices: mockPractices,
+          lastUpdated: DateTime(2022, 5, 8),
         ),
       );
 
@@ -95,7 +97,9 @@ void main() {
     group('when practices is empty', () {
       setUp(() {
         when(() => homeBloc.state).thenReturn(
-          const HomeState(),
+          HomeState(
+            lastUpdated: DateTime(2022, 5, 8),
+          ),
         );
       });
 
@@ -109,8 +113,9 @@ void main() {
     group('when practices is not empty', () {
       setUp(() {
         when(() => homeBloc.state).thenReturn(
-          const HomeState(
+          HomeState(
             practices: mockPractices,
+            lastUpdated: DateTime(2022, 5, 8),
           ),
         );
       });
@@ -118,6 +123,84 @@ void main() {
         await tester.pumpWidget(buildSubject());
 
         expect(find.byType(Card), findsNWidgets(mockPractices.length));
+      });
+    });
+
+    group('when the lastUpdated is far from the current date', () {
+      testWidgets('it should start the newDayEvent', (tester) async {
+        whenListen(
+            homeBloc,
+            Stream<HomeState>.fromIterable([
+              HomeState(
+                lastUpdated: DateTime(2002, 5, 8),
+              ),
+            ]));
+
+        await tester.pumpWidget(buildSubject());
+
+        verify(() => homeBloc.add(const NewDayEvent())).called(1);
+      });
+    });
+
+    group('when the lastUpdated is one day from the current date', () {
+      testWidgets('it should start the newDayEvent', (tester) async {
+        final today = DateTime.now();
+
+        whenListen(
+            homeBloc,
+            Stream<HomeState>.fromIterable([
+              HomeState(
+                lastUpdated: today.subtract(
+                  const Duration(
+                    days: 1,
+                  ),
+                ),
+              ),
+            ]));
+
+        await tester.pumpWidget(buildSubject());
+
+        verify(() => homeBloc.add(const NewDayEvent())).called(1);
+      });
+    });
+
+    group('when the lastUpdated is the same day as today', () {
+      testWidgets('it should not start the newDayEvent', (tester) async {
+        final today = DateTime.now();
+
+        whenListen(
+            homeBloc,
+            Stream<HomeState>.fromIterable([
+              HomeState(
+                lastUpdated: today,
+              ),
+            ]));
+
+        await tester.pumpWidget(buildSubject());
+
+        verifyNever(() => homeBloc.add(const NewDayEvent()));
+      });
+    });
+
+    group(
+        'when the lastUpdated is a future date (which should not be possible)',
+        () {
+      testWidgets('it should not start the newDayEvent', (tester) async {
+        final today = DateTime.now();
+
+        whenListen(
+            homeBloc,
+            Stream<HomeState>.fromIterable([
+              HomeState(
+                lastUpdated: today.add(
+                  const Duration(days: 1),
+                ),
+              ),
+            ]));
+
+        await tester.pumpWidget(buildSubject());
+
+        verifyNever(() => homeBloc.add(const NewDayEvent()));
       });
     });
   });

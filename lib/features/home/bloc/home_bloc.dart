@@ -9,11 +9,13 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final DailyPracticesRepository _dailyPracticesRepository;
+  final DateTime lastUpdated;
 
   HomeBloc({
     required DailyPracticesRepository dailyPracticesRepository,
+    required this.lastUpdated,
   })  : _dailyPracticesRepository = dailyPracticesRepository,
-        super(const HomeState()) {
+        super(HomeState(lastUpdated: lastUpdated)) {
     on<HomeSubscriptionRequested>(_onSubscriptionRequested);
   }
 
@@ -24,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await emit.forEach<List<DailyPractice>>(
         _dailyPracticesRepository.getDailyPractices(),
         onData: (dailyPractice) => state.copyWith(
-              practices: () => dailyPractice,
+              practices: dailyPractice,
             ),
         onError: (_, __) {
           log('Error!');

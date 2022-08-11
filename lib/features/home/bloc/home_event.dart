@@ -10,3 +10,7 @@ abstract class HomeEvent extends Equatable {
 class HomeSubscriptionRequested extends HomeEvent {
   const HomeSubscriptionRequested();
 }
+
+class NewDayEvent extends HomeEvent {
+  const NewDayEvent();
+}

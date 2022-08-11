@@ -27,18 +27,25 @@ void main() {
       ).thenAnswer((_) => Stream.value(mockPractices));
     });
 
-    HomeBloc buildBloc() {
-      return HomeBloc(dailyPracticesRepository: dailyPracticesRepository);
+    HomeBloc buildBloc({lastUpdated = DateTime}) {
+      return HomeBloc(
+        dailyPracticesRepository: dailyPracticesRepository,
+        lastUpdated: lastUpdated,
+      );
     }
 
     group('constructor', () {
-      test('works properly', () => expect(buildBloc, returnsNormally));
+      test(
+          'works properly',
+          () => expect(() => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
+              returnsNormally));
 
       test('has correct initial state', () {
+        final lastUpdated = DateTime(2022, 5, 8);
         expect(
-          buildBloc().state,
+          buildBloc(lastUpdated: lastUpdated).state,
           equals(
-            const HomeState(),
+            HomeState(lastUpdated: lastUpdated),
           ),
         );
       });
@@ -47,7 +54,7 @@ void main() {
     group('HomeSubscriptionRequested', () {
       blocTest<HomeBloc, HomeState>(
         'start listening to repository getDailyPractices stream',
-        build: buildBloc,
+        build: () => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
         act: (bloc) => bloc.add(const HomeSubscriptionRequested()),
         verify: (_) {
           verify(() => dailyPracticesRepository.getDailyPractices()).called(1);
@@ -57,11 +64,12 @@ void main() {
       blocTest<HomeBloc, HomeState>(
         'emits state with updated practices'
         'when repository getDailyPractices stream emits new practices',
-        build: buildBloc,
+        build: () => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
         act: (bloc) => bloc.add(const HomeSubscriptionRequested()),
         expect: () => [
-          const HomeState(
+          HomeState(
             practices: mockPractices,
+            lastUpdated: DateTime(2022, 5, 8),
           ),
         ],
       );

@@ -18,5 +18,21 @@ void main() {
         );
       });
     });
+
+    group('NewDayEvent', () {
+      test('supports value equality', () {
+        expect(
+          const NewDayEvent(),
+          equals(const NewDayEvent()),
+        );
+      });
+
+      test('props are correct', () {
+        expect(
+          const NewDayEvent().props,
+          equals(<Object?>[]),
+        );
+      });
+    });
   });
 }

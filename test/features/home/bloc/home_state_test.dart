@@ -8,12 +8,17 @@ void main() {
     practice: 'practice',
   );
   final mockPractices = [mockPractice];
+  final mockLastUpdated = DateTime(2002, 5, 8);
 
   group('MockState', () {
     HomeState createSubject({
       List<DailyPractice>? practices,
+      DateTime? lastUpdated,
     }) {
-      return HomeState(practices: practices ?? mockPractices);
+      return HomeState(
+        practices: practices ?? mockPractices,
+        lastUpdated: lastUpdated ?? mockLastUpdated,
+      );
     }
 
     test('supports value equality', () {
@@ -27,7 +32,10 @@ void main() {
 
     test('props are correct', () {
       expect(
-        createSubject(practices: mockPractices).props,
+        createSubject(
+          practices: mockPractices,
+          lastUpdated: mockLastUpdated,
+        ).props,
         equals(<Object?>[mockPractices]),
       );
     });
@@ -46,6 +54,7 @@ void main() {
         expect(
           createSubject().copyWith(
             practices: null,
+            lastUpdated: null,
           ),
           equals(
             createSubject(),
@@ -56,11 +65,13 @@ void main() {
       test('replaces every non-null parameter', () {
         expect(
           createSubject().copyWith(
-            practices: () => [],
+            practices: [],
+            lastUpdated: DateTime(2022, 4, 11),
           ),
           equals(
             createSubject(
               practices: [],
+              lastUpdated: DateTime(2022, 4, 11),
             ),
           ),
         );

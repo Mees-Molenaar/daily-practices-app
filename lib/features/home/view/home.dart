@@ -11,6 +11,7 @@ class PracticesPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => HomeBloc(
         dailyPracticesRepository: context.read<DailyPracticesRepository>(),
+        lastUpdated: DateTime(2022, 05, 08),
       )..add(const HomeSubscriptionRequested()),
       child: const PracticesView(),
     );
@@ -26,7 +27,16 @@ class PracticesView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Daily Practices'),
       ),
-      body: BlocBuilder<HomeBloc, HomeState>(
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          final currentDate = DateTime.now();
+          final daysDifference =
+              currentDate.difference(state.lastUpdated).inDays;
+
+          if (daysDifference > 0) {
+            BlocProvider.of<HomeBloc>(context).add(const NewDayEvent());
+          }
+        },
         builder: (context, state) {
           final practices = state.practices;
 
