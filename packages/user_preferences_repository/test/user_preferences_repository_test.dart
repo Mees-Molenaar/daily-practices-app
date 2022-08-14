@@ -54,5 +54,18 @@ void main() {
         );
       });
     });
+
+    group('setLastUpdated', () {
+      test('makes correct api request', () {
+        final repository = createSubject();
+
+        expect(
+          () => repository.setLastUpdated(
+            DateTime(2022, 4, 11),
+          ),
+          returnsNormally,
+        );
+      });
+    });
   });
 }

@@ -8,4 +8,7 @@ class UserPreferencesRepository {
   }) : _userPreferencesApi = userPreferencesApi;
 
   DateTime getLastUpdated() => _userPreferencesApi.userPreferences.lastUpdated;
+
+  void setLastUpdated(DateTime lastUpdated) =>
+      _userPreferencesApi.lastUpdated = lastUpdated;
 }
