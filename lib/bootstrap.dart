@@ -27,14 +27,12 @@ void bootstrap({
 
   runZonedGuarded(
     () async {
-      await BlocOverrides.runZoned(
-        () async => runApp(
-          DailyPracticeApp(
-            dailyPracticesRepository: dailyPracticesRepository,
-            userPreferencesRepository: userPreferencesRepository,
-          ),
+      Bloc.observer = AppBlocObserver();
+      runApp(
+        DailyPracticeApp(
+          dailyPracticesRepository: dailyPracticesRepository,
+          userPreferencesRepository: userPreferencesRepository,
         ),
-        blocObserver: AppBlocObserver(),
       );
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
