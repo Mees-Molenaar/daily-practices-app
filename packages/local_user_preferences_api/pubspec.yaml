@@ -1,0 +1,27 @@
+name: local_user_preferences_api
+description: A new Flutter package project.
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  shared_preferences: ^2.0.15
+  mocktail: ^0.3.0
+  intl: ^0.17.0
+
+  user_preferences_api:
+    path: ../user_preferences_api
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
