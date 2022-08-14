@@ -12,7 +12,7 @@ void main() {
 
     setUp(() {
       api = MockUserPreferencesApi();
-      when(() => api.userPreferences).thenReturn(
+      when(() => api.getUserPreferences()).thenReturn(
         UserPreferences(
           lastUpdated: DateTime(
             2002,

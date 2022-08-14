@@ -7,11 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:user_preferences_api/user_preferences_api.dart';
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 import '../../../mocks/mocks.dart';
 
 void main() {
   late DailyPracticesRepository dailyPracticesRepository;
+  late UserPreferencesRepository userPreferencesRepository;
 
   const mockPractices = [
     DailyPractice(
@@ -28,17 +31,39 @@ void main() {
     ),
   ];
 
+  final mockUserPreferencesApi = MockUserPreferencesApi();
+  when(() => mockUserPreferencesApi.getUserPreferences()).thenReturn(
+    UserPreferences(
+      lastUpdated: DateTime(
+        2002,
+        05,
+        08,
+      ),
+    ),
+  );
+
   group('PracticesPage', () {
     setUp(() {
       dailyPracticesRepository = MockDailyPracticesRepository();
       when(() => dailyPracticesRepository.getDailyPractices())
           .thenAnswer((_) => const Stream.empty());
+
+      userPreferencesRepository = MockUserPreferencesRepository();
+
+      when(() => userPreferencesRepository.getLastUpdated()).thenReturn(
+        DateTime(
+          2002,
+          05,
+          08,
+        ),
+      );
     });
 
     testWidgets('renders PracticesView', (tester) async {
       await tester.pumpWidget(
         DailyPracticeApp(
           dailyPracticesRepository: dailyPracticesRepository,
+          userPreferencesRepository: userPreferencesRepository,
         ),
       );
 
@@ -50,6 +75,7 @@ void main() {
       await tester.pumpWidget(
         DailyPracticeApp(
           dailyPracticesRepository: dailyPracticesRepository,
+          userPreferencesRepository: userPreferencesRepository,
         ),
       );
 

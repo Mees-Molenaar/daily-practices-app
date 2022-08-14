@@ -7,7 +7,7 @@ class LocalUserPreferencesApi implements IUserPreferencesApi {
 
   LocalUserPreferencesApi({required this.sharedPreferencesApi});
   @override
-  UserPreferences get userPreferences {
+  UserPreferences getUserPreferences() {
     final lastUpdated = _lastUpdated;
 
     return UserPreferences(lastUpdated: lastUpdated);

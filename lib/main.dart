@@ -12,7 +12,6 @@ import 'package:local_user_preferences_api/local_user_preferences_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,11 +22,10 @@ void main() async {
 
   final sharedPreferencesApi = await SharedPreferences.getInstance();
 
-  final UserPreferencesApi =
+  final userPreferencesApi =
       LocalUserPreferencesApi(sharedPreferencesApi: sharedPreferencesApi);
 
   // Setup reoccuring notification
-
   final List<ActiveNotification>? activeNotifications = await notifactionsApi
       .flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -63,6 +61,6 @@ void main() async {
 
   bootstrap(
     dailyPracticesApi: dailyPracticesApi,
-    userPreferencesApi: UserPreferencesApi,
+    userPreferencesApi: userPreferencesApi,
   );
 }

@@ -37,7 +37,7 @@ void main() {
       group('when a lastUpdated date is stored in shared preferences', () {
         test('it should return UserPreferences', () async {
           final api = await createSubject({});
-          final prefs = api.userPreferences;
+          final prefs = api.getUserPreferences();
           expect(
             prefs,
             isA<UserPreferences>(),
@@ -48,7 +48,7 @@ void main() {
           final api = await createSubject({
             'lastUpdated': '2002-05-08',
           });
-          final prefs = api.userPreferences;
+          final prefs = api.getUserPreferences();
           expect(
             prefs,
             equals(userPreferences),
@@ -60,7 +60,7 @@ void main() {
         test('it should return UserPreferences with the date 1992-01-01',
             () async {
           final api = await createSubject({});
-          final prefs = api.userPreferences;
+          final prefs = api.getUserPreferences();
           expect(
             prefs,
             equals(
@@ -79,7 +79,7 @@ void main() {
         final api = await createSubject({});
         api.lastUpdated = DateTime(2022, 4, 11);
 
-        final lastUpdatedUserPreferences = api.userPreferences;
+        final lastUpdatedUserPreferences = api.getUserPreferences();
         expect(
           lastUpdatedUserPreferences,
           equals(

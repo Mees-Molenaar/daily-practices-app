@@ -6,23 +6,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:daily_practices_app/app/app.dart';
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 import '../mocks/mocks.dart';
 
 void main() {
   late DailyPracticesRepository dailyPracticesRepository;
+  late UserPreferencesRepository userPreferencesRepository;
 
   setUp(() {
     dailyPracticesRepository = MockDailyPracticesRepository();
     when(
       () => dailyPracticesRepository.getDailyPractices(),
     ).thenAnswer((_) => const Stream.empty());
+
+    userPreferencesRepository = MockUserPreferencesRepository();
+
+    when(() => userPreferencesRepository.getLastUpdated()).thenReturn(
+      DateTime(
+        2002,
+        05,
+        08,
+      ),
+    );
   });
 
   group('DailyPracticeApp', () {
     testWidgets('renders AppView', (tester) async {
       await tester.pumpWidget(
-        DailyPracticeApp(dailyPracticesRepository: dailyPracticesRepository),
+        DailyPracticeApp(
+          dailyPracticesRepository: dailyPracticesRepository,
+          userPreferencesRepository: userPreferencesRepository,
+        ),
       );
 
       expect(find.byType(AppView), findsOneWidget);
@@ -31,8 +46,11 @@ void main() {
 
   group('AppView', () {
     testWidgets('renders MaterialApp with correct themes', (tester) async {
-      await tester.pumpWidget(RepositoryProvider.value(
-        value: dailyPracticesRepository,
+      await tester.pumpWidget(MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (_) => dailyPracticesRepository),
+          RepositoryProvider(create: (_) => userPreferencesRepository),
+        ],
         child: const AppView(),
       ));
 
@@ -45,8 +63,11 @@ void main() {
 
     testWidgets('renders PracticesPage', (tester) async {
       await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: dailyPracticesRepository,
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(create: (_) => dailyPracticesRepository),
+            RepositoryProvider(create: (_) => userPreferencesRepository),
+          ],
           child: const AppView(),
         ),
       );
