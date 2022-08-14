@@ -3,9 +3,7 @@ import 'package:user_preferences_api/src/models/user_preferences.dart';
 
 void main() {
   group('User Preferences', () {
-    UserPreferences createSubject({
-      String lastUpdated = '2002-05-08',
-    }) {
+    UserPreferences createSubject({required DateTime lastUpdated}) {
       return UserPreferences(
         lastUpdated: lastUpdated,
       );
@@ -14,23 +12,23 @@ void main() {
     group('constructor', () {
       test('works correctly', () {
         expect(
-          createSubject,
+          () => createSubject(lastUpdated: DateTime(2002, 05, 08)),
           returnsNormally,
         );
       });
 
       test('support value equalitiy', () {
         expect(
-          createSubject(),
-          equals(createSubject()),
+          createSubject(lastUpdated: DateTime(2002, 05, 08)),
+          equals(createSubject(lastUpdated: DateTime(2002, 05, 08))),
         );
       });
 
       test('props are correct', () {
         expect(
-          createSubject().props,
+          createSubject(lastUpdated: DateTime(2002, 05, 08)).props,
           equals([
-            '2002-05-08',
+            DateTime(2002, 05, 08),
           ]),
         );
       });
@@ -39,25 +37,26 @@ void main() {
     group('copyWith', () {
       test('returns the same object if no arguments are provided', () {
         expect(
-          createSubject().copyWith(),
-          equals(createSubject()),
+          createSubject(lastUpdated: DateTime(2002, 05, 08)).copyWith(),
+          equals(createSubject(lastUpdated: DateTime(2002, 05, 08))),
         );
       });
 
       test('retain the old value for every paramter if null is provided', () {
         expect(
-          createSubject().copyWith(
+          createSubject(lastUpdated: DateTime(2002, 05, 08)).copyWith(
             lastUpdated: null,
           ),
-          equals(createSubject()),
+          equals(createSubject(lastUpdated: DateTime(2002, 05, 08))),
         );
       });
 
       test('replaces every non-null parameter', () {
         expect(
-          createSubject().copyWith(lastUpdated: '2022-04-11'),
+          createSubject(lastUpdated: DateTime(2002, 05, 08))
+              .copyWith(lastUpdated: DateTime(2022, 04, 11)),
           equals(
-            createSubject(lastUpdated: '2022-04-11'),
+            createSubject(lastUpdated: DateTime(2022, 04, 11)),
           ),
         );
       });
@@ -69,7 +68,7 @@ void main() {
           UserPreferences.fromJson(<String, dynamic>{
             'lastUpdated': '2002-05-08',
           }),
-          createSubject(),
+          createSubject(lastUpdated: DateTime(2002, 05, 08)),
         );
       });
     });
@@ -77,7 +76,7 @@ void main() {
     group('toJson', () {
       test('works correctly', () {
         expect(
-            createSubject().toJson(),
+            createSubject(lastUpdated: DateTime(2002, 05, 08)).toJson(),
             equals(<String, dynamic>{
               'lastUpdated': '2002-05-08',
             }));

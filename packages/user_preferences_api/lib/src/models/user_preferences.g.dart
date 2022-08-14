@@ -8,10 +8,10 @@ part of 'user_preferences.dart';
 
 UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) =>
     UserPreferences(
-      lastUpdated: json['lastUpdated'] as String,
+      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
     );
 
 Map<String, dynamic> _$UserPreferencesToJson(UserPreferences instance) =>
     <String, dynamic>{
-      'lastUpdated': instance.lastUpdated,
+      'lastUpdated': instance.lastUpdated.toIso8601String(),
     };

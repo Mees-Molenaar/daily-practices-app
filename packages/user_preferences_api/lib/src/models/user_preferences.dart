@@ -8,7 +8,7 @@ part 'user_preferences.g.dart';
 @immutable
 @JsonSerializable()
 class UserPreferences extends Equatable {
-  final String lastUpdated;
+  final DateTime lastUpdated;
 
   const UserPreferences({required this.lastUpdated});
 
@@ -21,7 +21,7 @@ class UserPreferences extends Equatable {
   JsonMap toJson() => _$UserPreferencesToJson(this);
 
   UserPreferences copyWith({
-    String? lastUpdated,
+    DateTime? lastUpdated,
   }) {
     return UserPreferences(
       lastUpdated: lastUpdated ?? this.lastUpdated,
