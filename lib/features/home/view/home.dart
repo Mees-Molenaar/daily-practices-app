@@ -2,6 +2,7 @@ import 'package:daily_practices_app/features/home/bloc/home_bloc.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 class PracticesPage extends StatelessWidget {
   const PracticesPage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class PracticesPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => HomeBloc(
         dailyPracticesRepository: context.read<DailyPracticesRepository>(),
-        lastUpdated: DateTime(2022, 05, 08),
+        userPreferencesRepository: context.read<UserPreferencesRepository>(),
       )..add(const HomeSubscriptionRequested()),
       child: const PracticesView(),
     );

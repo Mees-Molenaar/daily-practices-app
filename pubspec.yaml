@@ -1,8 +1,5 @@
 name: daily_practices_app
-description: A new Flutter project.
-
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: An app that notifies you each day for your daily practice
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -35,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  intl: ^0.17.0
 
   hardcoded_daily_practices_api:
     path: "packages/hardcoded_daily_practices_api"
@@ -47,6 +45,15 @@ dependencies:
 
   local_notifications_api:
     path: "packages/local_notifications_api"
+
+  user_preferences_repository:
+    path: "packages/user_preferences_repository"
+
+  local_user_preferences_api:
+    path: "packages/local_user_preferences_api"
+
+  user_preferences_api:
+    path: "packages/user_preferences_api"
 
 dev_dependencies:
   flutter_test:

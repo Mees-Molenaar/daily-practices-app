@@ -2,7 +2,9 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:daily_practices_app/features/home/bloc/home_bloc.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 import '../../../mocks/mocks.dart';
 
@@ -15,37 +17,50 @@ void main() {
 
   group('HomeBloc', () {
     late DailyPracticesRepository dailyPracticesRepository;
+    late UserPreferencesRepository mockUserPreferencesRepository;
 
     setUpAll(() {
       registerFallbackValue(FakeDailyPractice());
     });
 
-    setUp(() {
+    setUp(() async {
       dailyPracticesRepository = MockDailyPracticesRepository();
       when(
         () => dailyPracticesRepository.getDailyPractices(),
       ).thenAnswer((_) => Stream.value(mockPractices));
+
+      mockUserPreferencesRepository = MockUserPreferencesRepository();
+
+      when(() => mockUserPreferencesRepository.getLastUpdated()).thenAnswer(
+        (_) => DateTime(
+          2002,
+          05,
+          08,
+        ),
+      );
     });
 
-    HomeBloc buildBloc({lastUpdated = DateTime}) {
+    HomeBloc buildBloc() {
       return HomeBloc(
         dailyPracticesRepository: dailyPracticesRepository,
-        lastUpdated: lastUpdated,
+        userPreferencesRepository: mockUserPreferencesRepository,
       );
     }
 
     group('constructor', () {
-      test(
-          'works properly',
-          () => expect(() => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
-              returnsNormally));
+      test('works properly', () => expect(() => buildBloc(), returnsNormally));
 
       test('has correct initial state', () {
-        final lastUpdated = DateTime(2022, 5, 8);
         expect(
-          buildBloc(lastUpdated: lastUpdated).state,
+          buildBloc().state,
           equals(
-            HomeState(lastUpdated: lastUpdated),
+            HomeState(
+              lastUpdated: DateTime(
+                2002,
+                05,
+                08,
+              ),
+            ),
           ),
         );
       });
@@ -54,7 +69,9 @@ void main() {
     group('HomeSubscriptionRequested', () {
       blocTest<HomeBloc, HomeState>(
         'start listening to repository getDailyPractices stream',
-        build: () => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
+        build: () {
+          return buildBloc();
+        },
         act: (bloc) => bloc.add(const HomeSubscriptionRequested()),
         verify: (_) {
           verify(() => dailyPracticesRepository.getDailyPractices()).called(1);
@@ -64,12 +81,44 @@ void main() {
       blocTest<HomeBloc, HomeState>(
         'emits state with updated practices'
         'when repository getDailyPractices stream emits new practices',
-        build: () => buildBloc(lastUpdated: DateTime(2022, 5, 8)),
+        build: () {
+          return buildBloc();
+        },
         act: (bloc) => bloc.add(const HomeSubscriptionRequested()),
         expect: () => [
           HomeState(
             practices: mockPractices,
             lastUpdated: DateTime(2022, 5, 8),
+          ),
+        ],
+      );
+    });
+
+    group('NewDayEvent', () {
+      blocTest<HomeBloc, HomeState>(
+        'stores the new lastUpdated date into sharedstorage',
+        build: () {
+          return buildBloc();
+        },
+        act: (bloc) => bloc.add(const NewDayEvent()),
+        verify: (_) {
+          verify(() => mockUserPreferencesRepository.setLastUpdated(any()))
+              .called(1);
+        },
+      );
+
+      final today = DateTime.now();
+      final formatter = DateFormat('y-MM-dd');
+      blocTest<HomeBloc, HomeState>(
+        'emits the updated state with the current lastUpdated date',
+        build: () {
+          return buildBloc();
+        },
+        act: (bloc) => bloc.add(const NewDayEvent()),
+        expect: () => [
+          HomeState(
+            lastUpdated:
+                formatter.parse('${today.year}-${today.month}-${today.day}'),
           ),
         ],
       );

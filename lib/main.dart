@@ -8,9 +8,11 @@ import 'package:hardcoded_daily_practices_api/hardcoded_daily_practices_api.dart
 import 'package:local_notifications_api/local_notifications_api.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:local_user_preferences_api/local_user_preferences_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,11 @@ void main() async {
   final dailyPracticesApi = HardcodedDailyPracticesApi();
   final notifactionsApi =
       LocalNotificationsApi(FlutterLocalNotificationsPlugin());
+
+  final sharedPreferencesApi = await SharedPreferences.getInstance();
+
+  final UserPreferencesApi =
+      LocalUserPreferencesApi(sharedPreferencesApi: sharedPreferencesApi);
 
   // Setup reoccuring notification
 
@@ -54,5 +61,8 @@ void main() async {
     log('Notification for next day is already set!');
   }
 
-  bootstrap(dailyPracticesApi: dailyPracticesApi);
+  bootstrap(
+    dailyPracticesApi: dailyPracticesApi,
+    userPreferencesApi: UserPreferencesApi,
+  );
 }

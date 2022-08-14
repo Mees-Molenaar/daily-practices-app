@@ -7,8 +7,13 @@ import 'package:daily_practices_app/app/app_bloc_observer.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_preferences_api/user_preferences_api.dart';
+import 'package:user_preferences_repository/user_preferences_repository.dart';
 
-void bootstrap({required IDailyPracticesApi dailyPracticesApi}) {
+void bootstrap({
+  required IDailyPracticesApi dailyPracticesApi,
+  required IUserPreferencesApi userPreferencesApi,
+}) {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
@@ -16,11 +21,18 @@ void bootstrap({required IDailyPracticesApi dailyPracticesApi}) {
   final dailyPracticesRepository =
       DailyPracticesRepository(dailyPracticesApi: dailyPracticesApi);
 
+  final userPreferencesRepository = UserPreferencesRepository(
+    userPreferencesApi: userPreferencesApi,
+  );
+
   runZonedGuarded(
     () async {
       await BlocOverrides.runZoned(
         () async => runApp(
-          DailyPracticeApp(dailyPracticesRepository: dailyPracticesRepository),
+          DailyPracticeApp(
+            dailyPracticesRepository: dailyPracticesRepository,
+            userPreferencesRepository: userPreferencesRepository,
+          ),
         ),
         blocObserver: AppBlocObserver(),
       );
