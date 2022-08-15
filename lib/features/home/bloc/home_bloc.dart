@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' show Random;
 
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -39,15 +40,37 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _updateLastUpdated(
-    NewDayEvent event,
-    Emitter<HomeState> emit,
-  ) async {
+      NewDayEvent event, Emitter<HomeState> emit) async {
     final today = DateTime.now();
+
+    final newActivePractice = _getNewActivePractice(
+      state.activePractice,
+      state.practices.length,
+    );
 
     _userPreferencesRepository.setLastUpdated(today);
 
+    _userPreferencesRepository.setActivePractice(newActivePractice);
+
     emit(state.copyWith(
       lastUpdated: today,
+      activePractice: newActivePractice,
     ));
   }
+}
+
+int _getNewActivePractice(
+  int oldPractice,
+  int totalPractices,
+) {
+  var newPractice = 1;
+
+  var rng = Random();
+
+  while (newPractice == oldPractice) {
+    newPractice =
+        rng.nextInt(totalPractices + 1) + 1; //NOTE: This makes zero impossible
+  }
+
+  return newPractice;
 }
