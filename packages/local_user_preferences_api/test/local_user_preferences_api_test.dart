@@ -10,10 +10,10 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 void main() {
   group('LocalUserPreferences', () {
     final userPreferences =
-        UserPreferences(lastUpdated: DateTime(2002, 05, 08));
+        UserPreferences(lastUpdated: DateTime(2002, 05, 08), activePractice: 1);
 
     Future<LocalUserPreferencesApi> createSubject(
-        Map<String, String> initialValues) async {
+        Map<String, Object> initialValues) async {
       SharedPreferences.setMockInitialValues(initialValues);
 
       final mockSharedPreferences = await SharedPreferences.getInstance();
@@ -66,6 +66,7 @@ void main() {
             equals(
               UserPreferences(
                 lastUpdated: DateTime(1992, 1, 1),
+                activePractice: 1,
               ),
             ),
           );
@@ -85,9 +86,33 @@ void main() {
           equals(
             UserPreferences(
               lastUpdated: DateTime(2022, 4, 11),
+              activePractice: 1,
             ),
           ),
         );
+      });
+    });
+
+    group('activePractice', () {
+      group('when getting the active practice', () {
+        test('it should return the value in the shared preferences object',
+            () async {
+          final api = await createSubject({'activePractice': 4});
+          final lastUpdatedUserPreferences = api.getUserPreferences();
+          expect(lastUpdatedUserPreferences.activePractice, equals(4));
+        });
+      });
+
+      group('when setting the active practice', () {
+        test(
+            'it should set the active practice in the shared preferences object',
+            () async {
+          final api = await createSubject({'activePractice': 4});
+          api.activePractice = 11;
+
+          final lastUpdatedUserPreferences = api.getUserPreferences();
+          expect(lastUpdatedUserPreferences.activePractice, equals(11));
+        });
       });
     });
   });

@@ -9,8 +9,10 @@ class LocalUserPreferencesApi implements IUserPreferencesApi {
   @override
   UserPreferences getUserPreferences() {
     final lastUpdated = _lastUpdated;
+    final activePractice = _activePractice;
 
-    return UserPreferences(lastUpdated: lastUpdated);
+    return UserPreferences(
+        lastUpdated: lastUpdated, activePractice: activePractice);
   }
 
   DateTime get _lastUpdated {
@@ -28,5 +30,15 @@ class LocalUserPreferencesApi implements IUserPreferencesApi {
 
     sharedPreferencesApi.setString(
         'lastUpdated', dateFormat.format(lastUpdated));
+  }
+
+  int get _activePractice {
+    return sharedPreferencesApi.getInt('activePractice') ??
+        1; // It returns the first entry if no activePractice is yet in the shared preferences
+  }
+
+  @override
+  set activePractice(int activePractice) {
+    sharedPreferencesApi.setInt('activePractice', activePractice);
   }
 }

@@ -12,4 +12,10 @@ class UserPreferencesRepository {
 
   void setLastUpdated(DateTime lastUpdated) =>
       _userPreferencesApi.lastUpdated = lastUpdated;
+
+  int getActivePractice() =>
+      _userPreferencesApi.getUserPreferences().activePractice;
+
+  void setActivePractice(int activePractice) =>
+      _userPreferencesApi.activePractice = activePractice;
 }

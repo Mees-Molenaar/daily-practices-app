@@ -19,6 +19,7 @@ void main() {
             05,
             08,
           ),
+          activePractice: 1,
         ),
       );
     });
@@ -53,18 +54,44 @@ void main() {
           ),
         );
       });
+      group('setLastUpdated', () {
+        test('makes correct api request', () {
+          final repository = createSubject();
+
+          expect(
+            () => repository.setLastUpdated(
+              DateTime(2022, 4, 11),
+            ),
+            returnsNormally,
+          );
+        });
+      });
     });
 
-    group('setLastUpdated', () {
-      test('makes correct api request', () {
-        final repository = createSubject();
+    group('activePractice', () {
+      group('when getActivePractice is called', () {
+        test('it should make a correct api request', () {
+          expect(
+            createSubject().getActivePractice(),
+            isNot(throwsA(anything)),
+          );
+        });
 
-        expect(
-          () => repository.setLastUpdated(
-            DateTime(2022, 4, 11),
-          ),
-          returnsNormally,
-        );
+        test('it should return the activePractice', () {
+          expect(
+            createSubject().getActivePractice(),
+            equals(1),
+          );
+        });
+      });
+
+      group('when setting the activePractice', () {
+        test('it should make a correct api request', () {
+          expect(
+            () => createSubject().setActivePractice(4),
+            returnsNormally,
+          );
+        });
       });
     });
   });
