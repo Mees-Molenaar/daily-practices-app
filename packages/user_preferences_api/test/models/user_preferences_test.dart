@@ -1,11 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:user_preferences_api/src/models/user_preferences.dart';
 
 void main() {
   group('User Preferences', () {
-    UserPreferences createSubject({required DateTime lastUpdated}) {
+    UserPreferences createSubject(
+        {required DateTime lastUpdated, int activePractice = 1}) {
       return UserPreferences(
         lastUpdated: lastUpdated,
+        activePractice: activePractice,
       );
     }
 
@@ -29,6 +32,7 @@ void main() {
           createSubject(lastUpdated: DateTime(2002, 05, 08)).props,
           equals([
             DateTime(2002, 05, 08),
+            1,
           ]),
         );
       });
@@ -46,6 +50,7 @@ void main() {
         expect(
           createSubject(lastUpdated: DateTime(2002, 05, 08)).copyWith(
             lastUpdated: null,
+            activePractice: null,
           ),
           equals(createSubject(lastUpdated: DateTime(2002, 05, 08))),
         );
@@ -53,10 +58,15 @@ void main() {
 
       test('replaces every non-null parameter', () {
         expect(
-          createSubject(lastUpdated: DateTime(2002, 05, 08))
-              .copyWith(lastUpdated: DateTime(2022, 04, 11)),
+          createSubject(lastUpdated: DateTime(2002, 05, 08)).copyWith(
+            lastUpdated: DateTime(2022, 04, 11),
+            activePractice: 11,
+          ),
           equals(
-            createSubject(lastUpdated: DateTime(2022, 04, 11)),
+            createSubject(
+              lastUpdated: DateTime(2022, 04, 11),
+              activePractice: 11,
+            ),
           ),
         );
       });
@@ -67,18 +77,28 @@ void main() {
         expect(
           UserPreferences.fromJson(<String, dynamic>{
             'lastUpdated': '2002-05-08',
+            'activePractice': 1,
           }),
-          createSubject(lastUpdated: DateTime(2002, 05, 08)),
+          createSubject(
+            lastUpdated: DateTime(2002, 05, 08),
+            activePractice: 1,
+          ),
         );
       });
     });
 
     group('toJson', () {
       test('works correctly', () {
+        final formatter = DateFormat('y-MM-ddTHH:mm:ss.000');
+
         expect(
-            createSubject(lastUpdated: DateTime(2002, 05, 08)).toJson(),
+            createSubject(
+              lastUpdated: DateTime(2002, 05, 08),
+              activePractice: 1,
+            ).toJson(),
             equals(<String, dynamic>{
-              'lastUpdated': '2002-05-08',
+              'lastUpdated': formatter.format(DateTime(2002, 05, 08)),
+              'activePractice': 1,
             }));
       });
     });

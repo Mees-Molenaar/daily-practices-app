@@ -9,11 +9,13 @@ part 'user_preferences.g.dart';
 @JsonSerializable()
 class UserPreferences extends Equatable {
   final DateTime lastUpdated;
+  final int activePractice;
 
-  const UserPreferences({required this.lastUpdated});
+  const UserPreferences(
+      {required this.lastUpdated, required this.activePractice});
 
   @override
-  List<Object?> get props => [lastUpdated];
+  List<Object?> get props => [lastUpdated, activePractice];
 
   static UserPreferences fromJson(JsonMap json) =>
       _$UserPreferencesFromJson(json);
@@ -22,9 +24,11 @@ class UserPreferences extends Equatable {
 
   UserPreferences copyWith({
     DateTime? lastUpdated,
+    int? activePractice,
   }) {
     return UserPreferences(
       lastUpdated: lastUpdated ?? this.lastUpdated,
+      activePractice: activePractice ?? this.activePractice,
     );
   }
 }
