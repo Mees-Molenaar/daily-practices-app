@@ -36,7 +36,7 @@ void main() {
           practices: mockPractices,
           lastUpdated: mockLastUpdated,
         ).props,
-        equals(<Object?>[mockPractices]),
+        equals(<Object?>[mockPractices, mockLastUpdated, 1]),
       );
     });
 

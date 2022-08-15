@@ -43,10 +43,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       NewDayEvent event, Emitter<HomeState> emit) async {
     final today = DateTime.now();
 
-    final newActivePractice = _getNewActivePractice(
-      state.activePractice,
-      state.practices.length,
-    );
+    var newActivePractice = state.activePractice;
+
+    if (state.practices.length > 1) {
+      newActivePractice = _getNewActivePractice(
+        state.activePractice,
+        state.practices.length,
+      );
+    }
 
     _userPreferencesRepository.setLastUpdated(today);
 
