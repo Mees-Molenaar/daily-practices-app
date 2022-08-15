@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  flutter_launcher_icons: ^0.10.0
 
   hardcoded_daily_practices_api:
     path: "packages/hardcoded_daily_practices_api"
