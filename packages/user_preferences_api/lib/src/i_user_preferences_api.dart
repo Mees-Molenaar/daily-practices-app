@@ -5,4 +5,5 @@ abstract class IUserPreferencesApi {
 
   UserPreferences getUserPreferences();
   set lastUpdated(DateTime lastUpdated);
+  set activePractice(int activePractice);
 }
