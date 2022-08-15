@@ -45,16 +45,37 @@ class PracticesView extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             itemCount: practices.length,
             itemBuilder: (BuildContext context, int index) {
-              return Card(
-                elevation: 3,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    child: Text(practices[index].id.toString()),
+              if (index == state.activePractice) {
+                return Card(
+                  elevation: 3,
+                  color: Theme.of(context).colorScheme.primary,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        practices[index].id.toString(),
+                      ),
+                    ),
+                    title: Text(
+                      practices[index].practice,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  title: Text(practices[index].practice),
-                ),
-              );
+                );
+              } else {
+                return Card(
+                  elevation: 3,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Text(practices[index].id.toString()),
+                    ),
+                    title: Text(practices[index].practice),
+                  ),
+                );
+              }
             },
           );
         },
