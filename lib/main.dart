@@ -38,23 +38,20 @@ void main() async {
 
     final today = tz.TZDateTime.now(tz.local);
 
-    // TODO: Change this notification time to next day at 07.00!
-    // TODO: Misschien moet ook dit gewoon een herhaalde worden?
     // TODO: Deze tijd kan uiteindelijk ook uit preferences gehaald worden!
     final notificationTime = tz.TZDateTime.local(
       today.year,
       today.month,
-      today.day,
-      today.hour,
-      today.minute,
-      today.second,
+      today.day + 1,
+      7,
+      0,
+      0,
     );
 
     await notifactionsApi.initialize();
 
     notifactionsApi.setNotification(
-        notificationTime.add(const Duration(seconds: 10)),
-        'Your new daily practice is ready!');
+        notificationTime, 'Your new daily practice is ready!');
   } else {
     log('Notification for next day is already set!');
   }

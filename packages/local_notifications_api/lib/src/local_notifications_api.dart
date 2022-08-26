@@ -36,26 +36,17 @@ class LocalNotificationsApi implements INotificationsApi {
     String message,
   ) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails('test_channel', 'test_channel',
-            channelDescription: 'your channel description',
+        AndroidNotificationDetails(
+            'daily_practices_channel', 'daily_practices_channel',
+            channelDescription:
+                'daily practices give a notification once a day',
             importance: Importance.max,
             priority: Priority.high,
             ticker: 'ticker');
 
-    log('Hello');
-    await flutterLocalNotificationsPlugin.show(
-      12345,
-      'Daily Practices App',
-      'Notification is set! for ${notificationTime.toString()}',
-      const NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-      ),
-    );
-
-    log('Is it me your looking foooor');
     await flutterLocalNotificationsPlugin.zonedSchedule(
       12456,
-      'Daily Practices App',
+      'Daily Practices',
       message,
       notificationTime,
       const NotificationDetails(
