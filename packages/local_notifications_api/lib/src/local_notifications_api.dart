@@ -14,7 +14,7 @@ class LocalNotificationsApi implements INotificationsApi {
   Future<bool?> initialize() async {
     try {
       const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('launcher_icon');
+          AndroidInitializationSettings('launcher_icon_foreground');
 
       const InitializationSettings initializationSettings =
           InitializationSettings(
