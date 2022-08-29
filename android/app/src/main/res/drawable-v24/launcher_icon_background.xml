@@ -8,10 +8,10 @@
       android:scaleY="0.9908257">
     <path
         android:pathData="M-1,-1h110v110h-110z"
-        android:fillColor="#293462"/>
+        android:fillColor="#4B0E56"/>
     <path
         android:pathData="M-1,-1h110v110h-110z"
-        android:fillAlpha="0.19">
+        android:fillAlpha="0.3">
       <aapt:attr name="android:fillColor">
         <gradient 
             android:startX="54"

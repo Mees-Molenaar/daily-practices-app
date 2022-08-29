@@ -33,6 +33,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
   flutter_launcher_icons: ^0.10.0
+  flutter_native_splash: ^2.2.8
 
   hardcoded_daily_practices_api:
     path: "packages/hardcoded_daily_practices_api"
@@ -114,3 +115,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  background_image: "assets/icon/Foreground_v2.png"
+  color: "#4B0E56"
