@@ -19,8 +19,40 @@ class PracticesPage extends StatelessWidget {
   }
 }
 
-class PracticesView extends StatelessWidget {
+class PracticesView extends StatefulWidget {
   const PracticesView({Key? key}) : super(key: key);
+
+  @override
+  State<PracticesView> createState() => _PracticesViewState();
+}
+
+class _PracticesViewState extends State<PracticesView>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final state = BlocProvider.of<HomeBloc>(context).state;
+
+      final currentDate = DateTime.now();
+      final daysDifference = currentDate.difference(state.lastUpdated).inDays;
+
+      if (daysDifference > 0) {
+        BlocProvider.of<HomeBloc>(context).add(const NewDayEvent());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +60,7 @@ class PracticesView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Daily Practices'),
       ),
-      body: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          final currentDate = DateTime.now();
-          final daysDifference =
-              currentDate.difference(state.lastUpdated).inDays;
-
-          if (daysDifference > 0) {
-            BlocProvider.of<HomeBloc>(context).add(const NewDayEvent());
-          }
-        },
+      body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           final practices = state.practices;
 

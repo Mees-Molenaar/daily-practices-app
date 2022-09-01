@@ -28,10 +28,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeSubscriptionRequested event,
     Emitter<HomeState> emit,
   ) async {
-    await emit.forEach<List<DailyPractice>>(
-        _dailyPracticesRepository.getDailyPractices(),
+    final dailyPractices = _dailyPracticesRepository.getDailyPractices();
+    final activePractice = _userPreferencesRepository.getActivePractice();
+
+    await emit.forEach<List<DailyPractice>>(dailyPractices,
         onData: (dailyPractice) => state.copyWith(
               practices: dailyPractice,
+              activePractice: activePractice,
             ),
         onError: (_, __) {
           log('Error!');
@@ -53,7 +56,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     _userPreferencesRepository.setLastUpdated(today);
-
     _userPreferencesRepository.setActivePractice(newActivePractice);
 
     emit(state.copyWith(
@@ -72,8 +74,9 @@ int _getNewActivePractice(
   var rng = Random();
 
   while (newPractice == oldPractice) {
-    newPractice =
-        rng.nextInt(totalPractices + 1) + 1; //NOTE: This makes zero impossible
+    var randomNumber =
+        rng.nextInt(totalPractices) + 1; //NOTE: This makes zero impossible
+    newPractice = randomNumber;
   }
 
   return newPractice;

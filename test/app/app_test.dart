@@ -29,6 +29,8 @@ void main() {
         08,
       ),
     );
+
+    when(() => userPreferencesRepository.getActivePractice()).thenReturn(10);
   });
 
   group('DailyPracticeApp', () {

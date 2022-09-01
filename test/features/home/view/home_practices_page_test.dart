@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:user_preferences_api/user_preferences_api.dart';
 import 'package:user_preferences_repository/user_preferences_repository.dart';
 
@@ -58,6 +57,8 @@ void main() {
           08,
         ),
       );
+
+      when(() => userPreferencesRepository.getActivePractice()).thenReturn(10);
     });
 
     testWidgets('renders PracticesView', (tester) async {
@@ -88,20 +89,14 @@ void main() {
     late HomeBloc homeBloc;
 
     setUp(() {
-      homeBloc = MockHomeBlock();
-      when(() => homeBloc.state).thenReturn(
-        HomeState(
-          practices: mockPractices,
-          lastUpdated: DateTime(2022, 5, 8),
-        ),
-      );
-
       dailyPracticesRepository = MockDailyPracticesRepository();
       when(dailyPracticesRepository.getDailyPractices)
           .thenAnswer((_) => const Stream.empty());
     });
 
-    Widget buildSubject() {
+    Widget buildSubject(
+      HomeBloc homeBloc,
+    ) {
       return BlocProvider<HomeBloc>(
         create: (context) => homeBloc,
         child: const MaterialApp(home: PracticesView()),
@@ -109,7 +104,14 @@ void main() {
     }
 
     testWidgets('renders AppBar with title text', (tester) async {
-      await tester.pumpWidget(buildSubject());
+      homeBloc = MockHomeBlock();
+      when(() => homeBloc.state).thenReturn(
+        HomeState(
+          practices: mockPractices,
+          lastUpdated: DateTime(2022, 5, 8),
+        ),
+      );
+      await tester.pumpWidget(buildSubject(homeBloc));
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(
@@ -123,6 +125,14 @@ void main() {
 
     group('when practices is empty', () {
       setUp(() {
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: DateTime(2022, 5, 8),
+          ),
+        );
+
         when(() => homeBloc.state).thenReturn(
           HomeState(
             lastUpdated: DateTime(2022, 5, 8),
@@ -131,7 +141,7 @@ void main() {
       });
 
       testWidgets('renders no listitems', (tester) async {
-        await tester.pumpWidget(buildSubject());
+        await tester.pumpWidget(buildSubject(homeBloc));
 
         expect(find.byType(ListTile), findsNothing);
       });
@@ -139,6 +149,14 @@ void main() {
 
     group('when practices is not empty', () {
       setUp(() {
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: DateTime(2022, 5, 8),
+          ),
+        );
+
         when(() => homeBloc.state).thenReturn(
           HomeState(
             practices: mockPractices,
@@ -147,63 +165,66 @@ void main() {
         );
       });
       testWidgets('renders all listitems', (tester) async {
-        await tester.pumpWidget(buildSubject());
+        await tester.pumpWidget(buildSubject(homeBloc));
 
         expect(find.byType(Card), findsNWidgets(mockPractices.length));
       });
     });
 
     group('when the lastUpdated is far from the current date', () {
+      setUp(() {
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: DateTime(2022, 5, 8),
+          ),
+        );
+      });
       testWidgets('it should start the newDayEvent', (tester) async {
-        whenListen(
-            homeBloc,
-            Stream<HomeState>.fromIterable([
-              HomeState(
-                lastUpdated: DateTime(2002, 5, 8),
-              ),
-            ]));
-
-        await tester.pumpWidget(buildSubject());
+        await tester.pumpWidget(buildSubject(homeBloc));
+        tester.binding
+            .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
         verify(() => homeBloc.add(const NewDayEvent())).called(1);
       });
     });
 
     group('when the lastUpdated is one day from the current date', () {
-      testWidgets('it should start the newDayEvent', (tester) async {
+      setUp(() {
         final today = DateTime.now();
-
-        whenListen(
-            homeBloc,
-            Stream<HomeState>.fromIterable([
-              HomeState(
-                lastUpdated: today.subtract(
-                  const Duration(
-                    days: 1,
-                  ),
-                ),
-              ),
-            ]));
-
-        await tester.pumpWidget(buildSubject());
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: today.subtract(const Duration(days: 1)),
+          ),
+        );
+      });
+      testWidgets('it should start the newDayEvent', (tester) async {
+        await tester.pumpWidget(buildSubject(homeBloc));
+        tester.binding
+            .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
         verify(() => homeBloc.add(const NewDayEvent())).called(1);
       });
     });
 
     group('when the lastUpdated is the same day as today', () {
-      testWidgets('it should not start the newDayEvent', (tester) async {
+      setUp(() {
         final today = DateTime.now();
-
-        whenListen(
-            homeBloc,
-            Stream<HomeState>.fromIterable([
-              HomeState(
-                lastUpdated: today,
-              ),
-            ]));
-
-        await tester.pumpWidget(buildSubject());
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: today,
+          ),
+        );
+      });
+      testWidgets('it should not start the newDayEvent', (tester) async {
+        await tester.pumpWidget(buildSubject(homeBloc));
+        tester.binding
+            .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
         verifyNever(() => homeBloc.add(const NewDayEvent()));
       });
@@ -212,20 +233,20 @@ void main() {
     group(
         'when the lastUpdated is a future date (which should not be possible)',
         () {
-      testWidgets('it should not start the newDayEvent', (tester) async {
+      setUp(() {
         final today = DateTime.now();
-
-        whenListen(
-            homeBloc,
-            Stream<HomeState>.fromIterable([
-              HomeState(
-                lastUpdated: today.add(
-                  const Duration(days: 1),
-                ),
-              ),
-            ]));
-
-        await tester.pumpWidget(buildSubject());
+        homeBloc = MockHomeBlock();
+        when(() => homeBloc.state).thenReturn(
+          HomeState(
+            practices: mockPractices,
+            lastUpdated: today.add(const Duration(days: 1)),
+          ),
+        );
+      });
+      testWidgets('it should not start the newDayEvent', (tester) async {
+        await tester.pumpWidget(buildSubject(homeBloc));
+        tester.binding
+            .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
         verifyNever(() => homeBloc.add(const NewDayEvent()));
       });

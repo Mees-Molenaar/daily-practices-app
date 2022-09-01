@@ -37,6 +37,9 @@ void main() {
           08,
         ),
       );
+
+      when(() => mockUserPreferencesRepository.getActivePractice())
+          .thenReturn(10);
     });
 
     HomeBloc buildBloc() {
@@ -88,7 +91,7 @@ void main() {
           HomeState(
             practices: mockPractices,
             lastUpdated: DateTime(2002, 5, 8),
-            activePractice: 1,
+            activePractice: 10,
           ),
         ],
       );
@@ -132,7 +135,7 @@ void main() {
 
         final interestedState = await bloc.stream.skip(1).first;
 
-        expect(interestedState.activePractice, isNot(equals(1)));
+        expect(interestedState.activePractice, isNot(equals(10)));
         expect(interestedState.lastUpdated.year, equals(today.year));
         expect(interestedState.lastUpdated.month, equals(today.month));
 
