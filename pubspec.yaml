@@ -34,6 +34,7 @@ dependencies:
   equatable: ^2.0.3
   flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.2.8
+  flutter_native_timezone: ^2.0.0
 
   hardcoded_daily_practices_api:
     path: "packages/hardcoded_daily_practices_api"

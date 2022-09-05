@@ -12,6 +12,7 @@ import 'package:local_user_preferences_api/local_user_preferences_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,11 @@ void main() async {
 
   if (activeNotifications?.isEmpty ?? true) {
     tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Europe/Amsterdam'));
+
+    final String currentTimeZone =
+        await FlutterNativeTimezone.getLocalTimezone();
+
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
     final today = tz.TZDateTime.now(tz.local);
 
