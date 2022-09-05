@@ -46,7 +46,16 @@ class _PracticesViewState extends State<PracticesView>
       final state = BlocProvider.of<HomeBloc>(context).state;
 
       final currentDate = DateTime.now();
-      final daysDifference = currentDate.difference(state.lastUpdated).inDays;
+      // TODO: Wanneer de tijd van de notificatie verandert kan worden moet dit ook veranderd
+      final lastUpdated = DateTime(
+        state.lastUpdated.year,
+        state.lastUpdated.month,
+        state.lastUpdated.day,
+        7,
+        0,
+        0,
+      );
+      final daysDifference = currentDate.difference(lastUpdated).inDays;
 
       if (daysDifference > 0) {
         BlocProvider.of<HomeBloc>(context).add(const NewDayEvent());
