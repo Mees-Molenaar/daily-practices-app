@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:daily_practices_app/app/app.dart';
 import 'package:daily_practices_app/features/home/bloc/home_bloc.dart';
 import 'package:daily_practices_app/features/home/view/home.dart';
@@ -8,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:user_preferences_api/user_preferences_api.dart';
 import 'package:user_preferences_repository/user_preferences_repository.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../../mocks/mocks.dart';
 
@@ -41,6 +45,14 @@ void main() {
       activePractice: 1,
     ),
   );
+
+  setUpAll(() {
+    tz.initializeTimeZones();
+
+    const String currentTimeZone = 'Europe/Amsterdam';
+
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  });
 
   group('PracticesPage', () {
     setUp(() {

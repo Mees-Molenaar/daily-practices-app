@@ -1,8 +1,11 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:daily_practices_app/features/home/bloc/home_bloc.dart';
 import 'package:daily_practices_repository/daily_practices_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_preferences_repository/user_preferences_repository.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class PracticesPage extends StatelessWidget {
   const PracticesPage({Key? key}) : super(key: key);
@@ -45,9 +48,9 @@ class _PracticesViewState extends State<PracticesView>
     if (state == AppLifecycleState.resumed) {
       final state = BlocProvider.of<HomeBloc>(context).state;
 
-      final currentDate = DateTime.now();
+      final currentDate = tz.TZDateTime.now(tz.local);
       // TODO: Wanneer de tijd van de notificatie verandert kan worden moet dit ook veranderd
-      final lastUpdated = DateTime(
+      final lastUpdated = tz.TZDateTime.local(
         state.lastUpdated.year,
         state.lastUpdated.month,
         state.lastUpdated.day,
