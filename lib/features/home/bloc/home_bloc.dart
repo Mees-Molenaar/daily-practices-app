@@ -44,24 +44,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _updateLastUpdated(
       NewDayEvent event, Emitter<HomeState> emit) async {
-    final today = DateTime.now();
+    try {
+      final today = DateTime.now();
 
-    var newActivePractice = state.activePractice;
+      var newActivePractice = state.activePractice;
 
-    if (state.practices.length > 1) {
-      newActivePractice = _getNewActivePractice(
-        state.activePractice,
-        state.practices.length,
-      );
+      if (state.practices.length > 1) {
+        newActivePractice = _getNewActivePractice(
+          state.activePractice,
+          state.practices.length,
+        );
+      }
+
+      _userPreferencesRepository.setLastUpdated(today);
+      _userPreferencesRepository.setActivePractice(newActivePractice);
+
+      emit(state.copyWith(
+        lastUpdated: today,
+        activePractice: newActivePractice,
+      ));
+    } catch (e) {
+      log(e.toString());
     }
-
-    _userPreferencesRepository.setLastUpdated(today);
-    _userPreferencesRepository.setActivePractice(newActivePractice);
-
-    emit(state.copyWith(
-      lastUpdated: today,
-      activePractice: newActivePractice,
-    ));
   }
 }
 
@@ -69,13 +73,12 @@ int _getNewActivePractice(
   int oldPractice,
   int totalPractices,
 ) {
-  var newPractice = 1;
-
   var rng = Random();
+  var newPractice = rng.nextInt(totalPractices + 1);
 
   while (newPractice == oldPractice) {
     var randomNumber =
-        rng.nextInt(totalPractices) + 1; //NOTE: This makes zero impossible
+        rng.nextInt(totalPractices + 1); //NOTE: This makes zero impossible
     newPractice = randomNumber;
   }
 
