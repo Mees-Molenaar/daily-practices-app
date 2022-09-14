@@ -27,7 +27,7 @@ jobs:
       - name: Get Flutter packages
         run: flutter pub get
 
-       - name: Start Chromedriver
+      - name: Start Chromedriver
         run: chromedriver --port=4444 &
 
       - name: Run Web instrumentation test
