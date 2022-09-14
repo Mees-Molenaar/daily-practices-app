@@ -39,5 +39,5 @@ jobs:
       - name: Start Emulator And Start Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 21
+          api-level: 23
           script: flutter test integration_test --verbose
