@@ -72,7 +72,27 @@ class _PracticesViewState extends State<PracticesView>
       appBar: AppBar(
         title: const Text('Daily Practices'),
       ),
-      body: BlocBuilder<HomeBloc, HomeState>(
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          // TODO: Duplicate code van hierboven dus een Code Smell
+          // NOTE: Maar anders werkt het niet wanneer je de app compleet opnieuw start
+          // Ook wordt dit nu 2x gechecked, maar de NewDayEvent wordt maar 1x uitgevoerd omdat na 1x update de daysDifference niet groter is dan 0
+          final currentDate = tz.TZDateTime.now(tz.local);
+          // TODO: Wanneer de tijd van de notificatie verandert kan worden moet dit ook veranderd
+          final lastUpdated = tz.TZDateTime.local(
+            state.lastUpdated.year,
+            state.lastUpdated.month,
+            state.lastUpdated.day,
+            7,
+            0,
+            0,
+          );
+          final daysDifference = currentDate.difference(lastUpdated).inDays;
+
+          if (daysDifference > 0) {
+            BlocProvider.of<HomeBloc>(context).add(const NewDayEvent());
+          }
+        },
         builder: (context, state) {
           final practices = state.practices;
 
