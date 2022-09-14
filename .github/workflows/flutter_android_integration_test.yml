@@ -28,11 +28,8 @@ jobs:
         run: flutter pub get
 
       # Use a Github Action from the Marketplace to start an Android Emulator with api-level 21
-      - name: run tests
+      - name: Start Emulator And Start Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 21
-          script: ./gradlew connectedCheck
-
-      - name: list emulators
-        run: flutter emulators
+          script: flutter test integration_test --verbose
