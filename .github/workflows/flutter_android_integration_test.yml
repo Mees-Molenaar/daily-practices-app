@@ -1,0 +1,37 @@
+name: flutter android integration test
+
+# Perform action when code is pushed to the main branche
+on:
+  push:
+    branches: [main]
+
+jobs:
+  android_integration_test:
+    runs-on: macOS-latest
+
+    # First checkout the new code
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    # Use a handy action from the Github marketplace to install flutter
+    - name: Install and set Flutter version
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.0.5"
+        channel: "stable"
+
+    - name: Show Flutter version
+      run: flutter --version
+
+    - name: Get Flutter packages
+      run: flutter pub get
+
+    # Use a Github Action from the Marketplace to start an Android Emulator with api-level 21
+    - name: run tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 21
+        script: ./gradlew connectedCheck
+
+    - name: list emulators
+      run: flutter emulators
