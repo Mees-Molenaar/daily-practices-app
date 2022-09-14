@@ -1,4 +1,4 @@
-name: Flutter Unit And Widget Tests
+name: Flutter Web Integration Tests
 
 # Perform action when code is pushed to the main branche
 on:
@@ -27,8 +27,8 @@ jobs:
       - name: Get Flutter packages
         run: flutter pub get
 
-      - name: Analyze the code
-        run: flutter analyze
+       - name: Start Chromedriver
+        run: chromedriver --port=4444 &
 
-      - name: Run unit tests with coverage
-        run: flutter test --coverage
+      - name: Run Web instrumentation test
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
