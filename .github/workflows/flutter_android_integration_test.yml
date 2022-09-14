@@ -19,6 +19,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v3.5.0
         with:
+          distribution: "zulu"
           java-version: "11.x"
 
       # Use a handy action from the Github marketplace to install flutter
