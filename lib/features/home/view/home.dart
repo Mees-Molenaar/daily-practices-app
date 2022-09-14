@@ -102,6 +102,7 @@ class _PracticesViewState extends State<PracticesView>
             itemBuilder: (BuildContext context, int index) {
               if (index == state.activePractice) {
                 return Card(
+                  key: const Key('ActivePractice'),
                   elevation: 3,
                   color: Theme.of(context).colorScheme.primary,
                   child: ListTile(
