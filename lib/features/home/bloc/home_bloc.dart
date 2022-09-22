@@ -69,16 +69,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 }
 
+// Indexing starts at 0 while using the listbuilder in home.dart
+// Therefore, the newPractice that is returned should be 0 - 25 (that is 26 entries as in practices_data.dart)
 int _getNewActivePractice(
   int oldPractice,
   int totalPractices,
 ) {
   var rng = Random();
-  var newPractice = rng.nextInt(totalPractices + 1);
+  //NOTE: rng.nextInt(0) given as error, this prevents it
+  if (totalPractices == 0) {
+    totalPractices = 1;
+  }
+  var newPractice = rng.nextInt(totalPractices);
 
   while (newPractice == oldPractice) {
-    var randomNumber =
-        rng.nextInt(totalPractices + 1); //NOTE: This makes zero impossible
+    var randomNumber = rng.nextInt(totalPractices);
     newPractice = randomNumber;
   }
 
