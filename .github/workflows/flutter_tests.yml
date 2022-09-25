@@ -1,6 +1,6 @@
 name: Flutter Unit And Widget Tests
 
-# Perform action when code is pushed to the main branche
+# Perform action when code is pushed to the main branch
 on:
   push:
     branches: [main]
