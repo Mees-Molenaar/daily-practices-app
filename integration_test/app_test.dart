@@ -49,10 +49,10 @@ void main() {
       );
 
       // Wait till app is loaded
-      await Future.delayed(const Duration(seconds: 1), () {});
+      await Future.delayed(const Duration(seconds: 3), () {});
 
       // Verify that the list can be found
-      final listFinder = find.byType(ListView);
+      final listFinder = find.byType(Scrollable);
       expect(listFinder, findsOneWidget);
 
       // Verify that the first practice can be found
@@ -77,13 +77,16 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Find the active Card
-      await tester.dragUntilVisible(
-          find.byKey(const ValueKey('ActivePractice')),
-          listFinder,
-          const Offset(-250, 0));
+      final activeItemFinder = find.byKey(const ValueKey('ActivePractice'));
 
-      expect(find.byKey(const ValueKey('ActivePractice')), findsOneWidget);
+      // Find the active practice
+      await tester.scrollUntilVisible(
+        activeItemFinder,
+        500.0,
+        scrollable: listFinder,
+      );
+
+      expect(activeItemFinder, findsOneWidget);
     });
   });
 }
