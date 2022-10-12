@@ -104,7 +104,7 @@ const dailyPractices = <Map<String, dynamic>>[
   {
     'id': 25,
     'practice':
-        'If you think, "Everything would be better of if I were death" then think. "That is really cool. Now I can do anything I want and I can postpone this thought for a while, maybe even a few months." Because what does it matter now? The planet might nov even be around in a few months',
+        'If you think, "Everything would be better of if I were death" then think. "That is really cool. Now I can do anything I want and I can postpone this thought for a while, maybe even a few months." Because what does it matter now? The planet might not even be around in a few months',
   },
   {
     'id': 26,
